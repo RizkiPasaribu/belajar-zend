@@ -7,6 +7,9 @@ return [
             \University\V1\Rest\Major\MajorResource::class => \University\V1\Rest\Major\MajorResourceFactory::class,
             \University\V1\Rest\Room\RoomResource::class => \University\V1\Rest\Room\RoomResourceFactory::class,
         ],
+        'abstract_factories' => [
+            0 => \University\Mapper\AbstractMapperFactory::class,
+        ],
     ],
     'router' => [
         'routes' => [

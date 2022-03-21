@@ -4,6 +4,9 @@ return [
         'factories' => [
             \Lectures\V1\Rest\Schedule\ScheduleResource::class => \Lectures\V1\Rest\Schedule\ScheduleResourceFactory::class,
         ],
+        'abstract_factories' => [
+            0 => \Lectures\Mapper\AbstractMapperFactory::class,
+        ],
     ],
     'router' => [
         'routes' => [

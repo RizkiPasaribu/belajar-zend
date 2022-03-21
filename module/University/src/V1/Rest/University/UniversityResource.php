@@ -1,11 +1,27 @@
 <?php
+
 namespace University\V1\Rest\University;
 
+use University\Mapper\UniversityTrait;
+use User\V1\Rest\AbstractResource;
 use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
 
-class UniversityResource extends AbstractResourceListener
+class UniversityResource extends AbstractResource
 {
+    use UniversityTrait;
+
+    protected $universityService;
+
+    public function __construct(
+        $universityMapper,
+        $userProfileMapper
+    ) {
+        $this->setUniversityMapper($universityMapper);
+        $this->setUserProfileMapper($userProfileMapper);
+    }
+
     /**
      * Create a resource
      *
@@ -58,7 +74,27 @@ class UniversityResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        return new ApiProblem(405, 'The GET method has not been defined for collections');
+        $userProfile = $this->fetchUserProfile();
+        if ($userProfile === null) {
+            return new ApiProblemResponse(new ApiProblem(403, "You do not have access!"));
+        }
+        $queryParams = [];
+        $queryParams = array_merge($queryParams, $params->toArray());
+        $order = null;
+        $asc   = false;
+        if (isset($queryParams['order'])) {
+            $order = $queryParams['order'];
+            unset($queryParams['order']);
+        }
+
+        if (isset($queryParams['asc'])) {
+            $asc = $queryParams['asc'];
+            unset($queryParams['asc']);
+        }
+
+        $qb = $this->getQRCodeMapper()->fetchAll($queryParams, $order, $asc);
+        $paginatorAdapter = $this->getQRCodeMapper()->createPaginatorAdapter($qb);
+        return new ZendPaginator($paginatorAdapter);
     }
 
     /**
@@ -105,5 +141,25 @@ class UniversityResource extends AbstractResourceListener
     public function update($id, $data)
     {
         return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
+    }
+
+    /**
+     * Get the value of universityService
+     */
+    public function getUniversityService()
+    {
+        return $this->universityService;
+    }
+
+    /**
+     * Set the value of universityService
+     *
+     * @return  self
+     */
+    public function setUniversityService($universityService)
+    {
+        $this->universityService = $universityService;
+
+        return $this;
     }
 }

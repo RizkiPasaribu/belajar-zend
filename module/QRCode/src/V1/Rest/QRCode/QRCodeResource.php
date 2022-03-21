@@ -45,7 +45,7 @@ class QRCodeResource extends AbstractResource
             'userProfile' => $userProfileUuid
         ];
         $userAccess = $this->getUserAccessMapper()->fetchOneBy($queryParamUserAccess);
-        //initiate var role, create condition to check if userAccess isExist 
+        //initiate var role, create condition to check if userAccess isExist
         $role = '';
         if (!is_null($userAccess)) {
             $role = strtolower($userAccess->getUserRole()->getName());
@@ -82,7 +82,7 @@ class QRCodeResource extends AbstractResource
             'userProfile' => $userProfileUuid
         ];
         $userAccess = $this->getUserAccessMapper()->fetchOneBy($queryParamUserAccess);
-        //initiate var role, create condition to check if userAccess isExist 
+        //initiate var role, create condition to check if userAccess isExist
         $role = '';
         if (!is_null($userAccess)) {
             $role = strtolower($userAccess->getUserRole()->getName());
@@ -120,7 +120,7 @@ class QRCodeResource extends AbstractResource
             'userProfile' => $userProfileUuid
         ];
         $userAccess = $this->getUserAccessMapper()->fetchOneBy($queryParamUserAccess);
-        //initiate var role, create condition to check if userAccess isExist 
+        //initiate var role, create condition to check if userAccess isExist
         $role = '';
         if (!is_null($userAccess)) {
             $role = strtolower($userAccess->getUserRole()->getName());
