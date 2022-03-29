@@ -9,11 +9,11 @@ class UniversityResourceFactory
         $userProfileMapper = $services->get('User\Mapper\UserProfile');
         $universityMapper   = $services->get(\University\Mapper\University::class);
         $universityService  = $services->get(\University\V1\Service\University::class);
-        $qrCodeResource = new UniversityResource(
+        $universityResource = new UniversityResource(
             $universityMapper,
             $userProfileMapper
         );
-        $qrCodeResource->setUniversityService($universityService);
-        return $qrCodeResource;
+        $universityResource->setUniversityService($universityService);
+        return $universityResource;
     }
 }

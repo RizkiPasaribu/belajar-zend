@@ -6,9 +6,16 @@ return [
             \University\V1\Rest\Faculty\FacultyResource::class => \University\V1\Rest\Faculty\FacultyResourceFactory::class,
             \University\V1\Rest\Major\MajorResource::class => \University\V1\Rest\Major\MajorResourceFactory::class,
             \University\V1\Rest\Room\RoomResource::class => \University\V1\Rest\Room\RoomResourceFactory::class,
+            \University\V1\Service\University::class => \University\V1\Service\UniversityFactory::class,
+            \University\V1\Service\Listener\UniversityEventListener::class => \University\V1\Service\Listener\UniversityEventListenerFactory::class,
         ],
         'abstract_factories' => [
             0 => \University\Mapper\AbstractMapperFactory::class,
+        ],
+    ],
+    'hydrators' => [
+        'factories' => [
+            'University\\Hydrator\\University' => \University\V1\Hydrator\UniversityHydratorFactory::class,
         ],
     ],
     'router' => [
@@ -78,7 +85,7 @@ return [
             'collection_query_whitelist' => [],
             'page_size' => 25,
             'page_size_param' => null,
-            'entity_class' => 'University\\Entity\\University',
+            'entity_class' => \University\Entity\University::class,
             'collection_class' => \University\V1\Rest\University\UniversityCollection::class,
             'service_name' => 'University',
         ],
@@ -100,7 +107,7 @@ return [
             'collection_query_whitelist' => [],
             'page_size' => 25,
             'page_size_param' => null,
-            'entity_class' => 'University\\Entity\\Faculty',
+            'entity_class' => \University\Entity\Faculty::class,
             'collection_class' => \University\V1\Rest\Faculty\FacultyCollection::class,
             'service_name' => 'Faculty',
         ],
@@ -122,7 +129,7 @@ return [
             'collection_query_whitelist' => [],
             'page_size' => 25,
             'page_size_param' => null,
-            'entity_class' => 'University\\Entity\\Major',
+            'entity_class' => \University\Entity\Major::class,
             'collection_class' => \University\V1\Rest\Major\MajorCollection::class,
             'service_name' => 'Major',
         ],
@@ -235,19 +242,19 @@ return [
                 'route_identifier_name' => 'uuid',
                 'is_collection' => true,
             ],
-            'University\\Entity\\University' => [
+            \University\Entity\University::class => [
                 'entity_identifier_name' => 'uuid',
                 'route_name' => 'university.rest.university',
                 'route_identifier_name' => 'uuid',
-                'hydrator' => \Zend\Hydrator\ArraySerializable::class,
+                'hydrator' => 'University\\Hydrator\\University',
             ],
-            'University\\Entity\\Faculty' => [
+            \University\Entity\Faculty::class => [
                 'entity_identifier_name' => 'uuid',
                 'route_name' => 'university.rest.faculty',
                 'route_identifier_name' => 'uuid',
                 'hydrator' => \Zend\Hydrator\ArraySerializable::class,
             ],
-            'University\\Entity\\Major' => [
+            \University\Entity\Major::class => [
                 'entity_identifier_name' => 'uuid',
                 'route_name' => 'university.rest.major',
                 'route_identifier_name' => 'uuid',

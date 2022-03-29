@@ -36,6 +36,9 @@ data/item
 data/item/.gitkeep
 !data/DoctrineORMModule/Migrations
 !data/cache/.gitkeep
+!data/photo/university/.gitkeep
+!data/photo/university/logo/.gitkeep
+!data/photo/.gitkeep
 !data/photo/.gitkeep
 !data/photo/leave/.gitkeep
 !data/photo/overtime/.gitkeep

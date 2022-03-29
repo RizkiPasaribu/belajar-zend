@@ -8,22 +8,23 @@ use \Exception;
 
 class UniversityEvent extends Event
 {
-    const EVENT_CREATE_QRCODE           = 'create.qrcode';
-    const EVENT_CREATE_QRCODE_SUCCESS   = 'create.qrcode.success';
-    const EVENT_CREATE_QRCODE_ERROR     = 'create.qrcode.error';
+    const EVENT_CREATE_UNIVERSITY           = 'create.university';
+    const EVENT_CREATE_UNIVERSITY_SUCCESS   = 'create.university.success';
+    const EVENT_CREATE_UNIVERSITY_ERROR     = 'create.university.error';
 
-    const EVENT_CREATE_MASS_QRCODE          = 'create.mass.qrcode';
-    const EVENT_CREATE_MASS_QRCODE_SUCCESS  = 'create.mass.qrcode.success';
-    const EVENT_CREATE_MASS_QRCODE_ERROR    = 'create.mass.qrcode.error';
+    const EVENT_EDIT_UNIVERSITY           = 'edit.university';
+    const EVENT_EDIT_UNIVERSITY_SUCCESS   = 'edit.university.success';
+    const EVENT_EDIT_UNIVERSITY_ERROR     = 'edit.university.error';
+
+    const EVENT_DELETE_UNIVERSITY           = 'delete.university';
+    const EVENT_DELETE_UNIVERSITY_SUCCESS   = 'delete.university.success';
+    const EVENT_DELETE_UNIVERSITY_ERROR     = 'delete.university.error';
+
+    /**#@-*/
     /**
      * @var University\Entity\University
      */
-
-    protected $units;
-
-    protected $qrCodeEntity;
-
-    protected $qrCodeCollection;
+    protected $universityEntity;
 
     /**
      * @var Zend\InputFilter\InputFilterInterface
@@ -35,36 +36,13 @@ class UniversityEvent extends Event
      */
     protected $exception;
 
-    protected $userProfile;
+    protected $deleteData;
+
+    protected $bodyResponse;
+
 
     /**
-     * Get the value of qrCodeEntity
-     *
-     * @return  University\Entity\University
-     */
-    public function getQrCodeEntity()
-    {
-        return $this->qrCodeEntity;
-    }
-
-    /**
-     * Set the value of qrCodeEntity
-     *
-     * @param  University\Entity\University  $qrCodeEntity
-     *
-     * @return  self
-     */
-    public function setQrCodeEntity(\University\Entity\University $qrCodeEntity)
-    {
-        $this->qrCodeEntity = $qrCodeEntity;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of inputFilter
-     *
-     * @return  Zend\InputFilter\InputFilterInterface
+     * @return the $inputFilter
      */
     public function getInputFilter()
     {
@@ -72,23 +50,15 @@ class UniversityEvent extends Event
     }
 
     /**
-     * Set the value of inputFilter
-     *
-     * @param  Zend\InputFilter\InputFilterInterface  $inputFilter
-     *
-     * @return  self
+     * @param Zend\InputFilter\InputFilterInterface $inputFilter
      */
-    public function setInputFilter(\Zend\InputFilter\InputFilterInterface $inputFilter)
+    public function setInputFilter(InputFilterInterface $inputFilter)
     {
         $this->inputFilter = $inputFilter;
-
-        return $this;
     }
 
     /**
-     * Get the value of exception
-     *
-     * @return  \Exception
+     * @return the $exception
      */
     public function getException()
     {
@@ -96,75 +66,73 @@ class UniversityEvent extends Event
     }
 
     /**
-     * Set the value of exception
-     *
-     * @param  \Exception  $exception
-     *
-     * @return  self
+     * @param Exception $exception
      */
-    public function setException(\Exception $exception)
+    public function setException(Exception $exception)
     {
         $this->exception = $exception;
+    }
+
+    /**
+     * Get the value of bodyResponse
+     */
+    public function getBodyResponse()
+    {
+        return $this->bodyResponse;
+    }
+
+    /**
+     * Set the value of bodyResponse
+     *
+     * @return  self
+     */
+    public function setBodyResponse($bodyResponse)
+    {
+        $this->bodyResponse = $bodyResponse;
 
         return $this;
     }
 
     /**
-     * Get the value of userProfile
+     * Get the value of deleteData
      */
-    public function getUserProfile()
+    public function getDeleteData()
     {
-        return $this->userProfile;
+        return $this->deleteData;
     }
 
     /**
-     * Set the value of userProfile
+     * Set the value of deleteData
      *
      * @return  self
      */
-    public function setUserProfile(\User\Entity\UserProfile $userProfile)
+    public function setDeleteData($deleteData)
     {
-        $this->userProfile = $userProfile;
+        $this->deleteData = $deleteData;
 
         return $this;
     }
 
     /**
-     * Get the value of qrCodeCollection
+     * Get the value of universityEntity
+     *
+     * @return  University\Entity\University
      */
-    public function getQrCodeCollection()
+    public function getUniversityEntity()
     {
-        return $this->qrCodeCollection;
+        return $this->universityEntity;
     }
 
     /**
-     * Set the value of qrCodeCollection
+     * Set the value of universityEntity
+     *
+     * @param  University\Entity\University  $universityEntity
      *
      * @return  self
      */
-    public function setQrCodeCollection(array $qrCodeCollection)
+    public function setUniversityEntity(\University\Entity\University $universityEntity)
     {
-        $this->qrCodeCollection = $qrCodeCollection;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of units
-     */
-    public function getUnits()
-    {
-        return $this->units;
-    }
-
-    /**
-     * Set the value of units
-     *
-     * @return  self
-     */
-    public function setUnits($units)
-    {
-        $this->units = $units;
+        $this->universityEntity = $universityEntity;
 
         return $this;
     }

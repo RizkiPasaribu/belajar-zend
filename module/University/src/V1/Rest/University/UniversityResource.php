@@ -4,6 +4,7 @@ namespace University\V1\Rest\University;
 
 use University\Mapper\UniversityTrait;
 use User\V1\Rest\AbstractResource;
+use Zend\Paginator\Paginator;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
@@ -30,7 +31,26 @@ class UniversityResource extends AbstractResource
      */
     public function create($data)
     {
-        return new ApiProblem(405, 'The POST method has not been defined');
+        $userProfile = $this->fetchUserProfile();
+        if (is_null($userProfile)) {
+            return new ApiProblemResponse(new ApiProblem(403, "You do not have access!"));
+        }
+
+        $data = (array) $data;
+        $inputFilter = $this->getInputFilter();
+        try {
+
+            $inputFilter->add(['name' => 'createdAt']);
+            $inputFilter->get('createdAt')->setValue(new \DateTime('now'));
+
+            $inputFilter->add(['name' => 'updatedAt']);
+            $inputFilter->get('updatedAt')->setValue(new \DateTime('now'));
+
+            $result = $this->universityService->addUniversity($inputFilter);
+            return $result;
+        } catch (\User\V1\Service\Exception\RuntimeException $e) {
+            return new ApiProblemResponse(new ApiProblem(500, $e->getMessage()));
+        }
     }
 
     /**
@@ -92,9 +112,9 @@ class UniversityResource extends AbstractResource
             unset($queryParams['asc']);
         }
 
-        $qb = $this->getQRCodeMapper()->fetchAll($queryParams, $order, $asc);
-        $paginatorAdapter = $this->getQRCodeMapper()->createPaginatorAdapter($qb);
-        return new ZendPaginator($paginatorAdapter);
+        $qb = $this->universityMapper->fetchAll($queryParams, $order, $asc);
+        $paginatorAdapter = $this->universityMapper->createPaginatorAdapter($qb);
+        return new Paginator($paginatorAdapter);
     }
 
     /**

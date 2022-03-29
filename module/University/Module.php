@@ -2,10 +2,21 @@
 
 namespace University;
 
+use Zend\Mvc\MvcEvent;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 
 class Module implements ApigilityProviderInterface
 {
+    public function onBootstrap(MvcEvent $mvcEvent)
+    {
+        $sm = $mvcEvent->getApplication()->getServiceManager();
+
+        // University
+        $universityService = $sm->get(\University\V1\Service\University::class);
+        $universityEventListener = $sm->get(\University\V1\Service\Listener\UniversityEventListener::class);
+        $universityEventListener->attach($universityService->getEventManager());
+    }
+
     public function getConfig()
     {
         $config = [];
