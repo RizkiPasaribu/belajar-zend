@@ -1,6 +1,7 @@
 <?php
 namespace Rombels\V1\Rest\Kelas;
 
+use Amp\Success;
 use Rombels\Mapper\KelasTrait;
 use User\Mapper\UserProfileTrait;
 use User\V1\Rest\AbstractResource;
@@ -56,7 +57,23 @@ class KelasResource extends AbstractResource
      */
     public function delete($id)
     {
-        return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
+        //cek authorization
+        $userProfile = $this->fetchUserProfile();
+        if (is_null($userProfile) || is_null($userProfile->getAccount())) {
+            return new ApiProblemResponse(new ApiProblem(404, "You do not have access"));
+        }
+        
+        try {
+            $kelas = $this->getKelasMapper()->fetchOneBy(['uuid' => $id]);
+            if (is_null($kelas)) {
+                return new ApiProblem(404, "Kelas data Not Found");
+            }
+            $this->getKelasService()->deleteKelas($kelas);
+            return new ApiProblem(200, "Succes Deleted uuid".$id,null,"Success");
+        } catch (\RuntimeException $e) {
+            return new ApiProblemResponse(new ApiProblem(500, $e->getMessage()));
+        }
+        // return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
     }
 
     /**
@@ -67,6 +84,7 @@ class KelasResource extends AbstractResource
      */
     public function deleteList($data)
     {
+        
         return new ApiProblem(405, 'The DELETE method has not been defined for collections');
     }
 
@@ -109,7 +127,14 @@ class KelasResource extends AbstractResource
      */
     public function patch($id, $data)
     {
-        return new ApiProblem(405, 'The PATCH method has not been defined for individual resources');
+        $kelas = $this->getKelasMapper()->fetchOneBy(['uuid' => $id]);
+        if (is_null($kelas)) {
+            return new ApiProblemResponse(new ApiProblem(404, "Kelas data not found!"));
+        }
+        $inputFilter = $this->getInputFilter();
+
+        $this->getKelasService()->editKelas($kelas, $inputFilter);
+        return $kelas;
     }
 
     /**
@@ -152,5 +177,10 @@ class KelasResource extends AbstractResource
         $this->kelasService = $kelasService;
 
         return $this;
+    }
+
+    public function getKelasService()
+    {
+        return $this->kelasService;
     }
 }

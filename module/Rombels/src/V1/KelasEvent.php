@@ -40,6 +40,8 @@ class KelasEvent extends Event
 
     protected $bodyResponse;
 
+    protected $updateData;
+
 
     /**
      * @return the $inputFilter
@@ -135,5 +137,15 @@ class KelasEvent extends Event
         $this->kelasEntity = $kelasEntity;
 
         return $this;
+    }
+
+    public function getUpdateData()
+    {
+        return $this->updateData;
+    }
+
+    public function setUpdateData($updateData)
+    {
+        $this->updateData = $updateData;
     }
 }

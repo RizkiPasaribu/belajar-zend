@@ -33,11 +33,11 @@ class Kelas
         }
     }
     
-    public function editKelas($innnovationEntity, ZendInputFilter $inputFilter)
+    public function editKelas($kelas, ZendInputFilter $inputFilter)
     {
         $kelasEvent = new KelasEvent();
-        $kelasEvent->setKelasEntity($innnovationEntity);
         $kelasEvent->setInputFilter($inputFilter);
+        $kelasEvent->setKelasEntity($kelas);
         $kelasEvent->setName(KelasEvent::EVENT_EDIT_KELAS);
         $create = $this->getEventManager()->triggerEvent($kelasEvent);
         if ($create->stopped()) {

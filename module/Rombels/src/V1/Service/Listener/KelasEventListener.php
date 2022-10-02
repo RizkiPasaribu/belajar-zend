@@ -115,7 +115,7 @@ class KelasEventListener implements ListenerAggregateInterface
             if (!($hydratedEntity instanceof Kelas))
                 throw new \Exception('HyratedEntity is not instance of Kelas Entity');
 
-            $resultEntity  = $this->kelassMapper->save($hydratedEntity);
+            $resultEntity  = $this->kelasMapper->save($hydratedEntity);
 
             if (!($resultEntity instanceof Kelas))
                 throw new \Exception("ResultEntity is not instance of Kelas Entity");
