@@ -13,11 +13,11 @@ return [
             'zf3_mysql' => [
                 'database' => 'mysql567',
                 'driver' => 'PDO_Mysql',
-                'hostname' => 'xtend-test',
+                'hostname' => 'coba-rest-zf3',
                 'username' => 'root',
                 'password' => 'password',
                 'port' => '3306',
-                'dsn' => 'mysql:dbname=mysql567;host=xtend-test;charset=utf8',
+                'dsn' => 'mysql:dbname=mysql567;host=coba-rest-zf3;charset=utf8',
             ],
         ],
     ],
@@ -56,9 +56,10 @@ return [
                 'Attendance\\V1' => 'oauth2_pdo',
                 'Journal\\V1' => 'oauth2_pdo',
                 'Stock\\V1' => 'oauth2_pdo',
-                'University\\V1' => 'oauth2_pdo',
-                'Student\\V1' => 'oauth2_pdo',
-                'Lectures\\V1' => 'oauth2_pdo',
+                // 'University\\V1' => 'oauth2_pdo',
+                // 'Student\\V1' => 'oauth2_pdo',
+                // 'Lectures\\V1' => 'oauth2_pdo',
+                'Rombels\\V1' => 'oauth2_pdo',
             ],
             'adapters' => [
                 'oauth2_pdo' => [

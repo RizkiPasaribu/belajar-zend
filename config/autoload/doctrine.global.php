@@ -10,7 +10,7 @@ return [
                     'port'     => '3306',
                     'user'     => 'root',
                     'password' => 'password',
-                    'dbname'   => 'xtend-test',
+                    'dbname'   => 'coba-rest-zf3',
                     'charset'  => 'utf8'
                 ],
             ],

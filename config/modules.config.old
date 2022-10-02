@@ -39,5 +39,4 @@ return [
     'QRCode',
     'Notification',
     'Xtend',
-    'University',
 ];

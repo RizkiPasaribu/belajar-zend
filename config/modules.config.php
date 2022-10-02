@@ -39,6 +39,5 @@ return [
     'QRCode',
     'Notification',
     'Xtend',
-    'University',
-    'Lectures',
+    'Rombels',
 ];
