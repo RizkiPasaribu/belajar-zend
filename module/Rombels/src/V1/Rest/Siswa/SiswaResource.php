@@ -1,4 +1,5 @@
 <?php
+
 namespace Rombels\V1\Rest\Siswa;
 
 use Rombels\Mapper\KelasTrait;
@@ -18,7 +19,7 @@ class SiswaResource extends AbstractResource
     use UserProfileTrait;
     use SiswaTrait;
     use KelasTrait;
-    public function __construct($userProfileMapper,$siswaMapper,$kelasMapper)
+    public function __construct($userProfileMapper, $siswaMapper, $kelasMapper)
     {
         $this->setUserProfileMapper($userProfileMapper);
         $this->setSiswaMapper($siswaMapper);
@@ -49,9 +50,9 @@ class SiswaResource extends AbstractResource
                     "uuid" => $kelasSlug
                 ]);
                 if (empty($kelasEntity)) return new ApiProblemResponse(new ApiProblem(404, "Tabel Not Found!!"));
-            } 
-            
-            $inputFilter->add(['name' => 'kelas']);    
+            }
+
+            $inputFilter->add(['name' => 'kelas']);
             $inputFilter->get('kelas')->setValue($kelasSlug);
 
             $inputFilter->add(['name' => 'createdAt']);
@@ -59,7 +60,7 @@ class SiswaResource extends AbstractResource
 
             $inputFilter->add(['name' => 'updatedAt']);
             $inputFilter->get('updatedAt')->setValue(new \DateTime('now'));
-            
+
             $result = $this->siswaService->addSiswa($inputFilter);
             return $result;
         } catch (\User\V1\Service\Exception\RuntimeException $e) {
@@ -79,14 +80,14 @@ class SiswaResource extends AbstractResource
         if (is_null($userProfile) || is_null($userProfile->getAccount())) {
             return new ApiProblemResponse(new ApiProblem(404, "You do not have access"));
         }
-        
+
         try {
             $kelas = $this->getSiswaMapper()->fetchOneBy(['uuid' => $id]);
             if (is_null($kelas)) {
                 return new ApiProblem(404, "Kelas data Not Found");
             }
             $this->getSiswaService()->deleteSiswa($kelas);
-            return new ApiProblem(200, "Succes Deleted Siswa With UUID ".$id,null,"Success");
+            return new ApiProblem(200, "Succes Deleted Siswa With UUID " . $id, null, "Success");
         } catch (\RuntimeException $e) {
             return new ApiProblemResponse(new ApiProblem(500, $e->getMessage()));
         }
@@ -112,7 +113,7 @@ class SiswaResource extends AbstractResource
     public function fetch($id)
     {
         $siswa = $this->siswaMapper->fetchOne($id);
-        if(!$siswa) return new ApiProblemResponse(new ApiProblem(404,'School Not Found'));
+        if (!$siswa) return new ApiProblemResponse(new ApiProblem(404, 'School Not Found'));
         return $siswa;
     }
 
@@ -125,10 +126,10 @@ class SiswaResource extends AbstractResource
     public function fetchAll($params = [])
     {
         $userProfile = $this->fetchUserProfile();
-        if(is_null($userProfile)) return new ApiProblemResponse(new ApiProblem(401,'You\'re Not Authorized'));
+        if (is_null($userProfile)) return new ApiProblemResponse(new ApiProblem(401, 'You\'re Not Authorized'));
         $urlParams = $params->toArray();
         $qb = $this->siswaMapper->fetchAll($urlParams);
-        $paginatorAdapter =$this->siswaMapper->createPaginatorAdapter($qb);
+        $paginatorAdapter = $this->siswaMapper->createPaginatorAdapter($qb);
         return new Paginator($paginatorAdapter);
     }
 
@@ -141,7 +142,7 @@ class SiswaResource extends AbstractResource
      */
     public function patch($id, $data)
     {
-        $siswa = $this->getSiswaMapper()->fetchOneBy(['uuid'=>$id]);
+        $siswa = $this->getSiswaMapper()->fetchOneBy(['uuid' => $id]);
         if (is_null($siswa)) {
             return new ApiProblemResponse(new ApiProblem(404, "Siswa data not found!"));
         }

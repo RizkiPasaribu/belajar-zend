@@ -16,6 +16,7 @@ return [
     'hydrators' => [
         'factories' => [
             'Rombels\\Hydrator\\Siswa' => \Rombels\V1\Hydrator\SiswaHydratorFactory::class,
+            'Rombels\\Hydrator\\Kelas' => \Rombels\V1\Hydrator\KelasHydratorFactory::class,
         ],
     ],
     'router' => [
@@ -158,7 +159,7 @@ return [
                 'entity_identifier_name' => 'uuid',
                 'route_name' => 'rombels.rest.kelas',
                 'route_identifier_name' => 'uuid',
-                'hydrator' => 'Rombels\\Hydrator\\Siswa',
+                'hydrator' => 'Rombels\\Hydrator\\Kelas',
             ],
         ],
     ],
