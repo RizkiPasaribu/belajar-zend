@@ -9,6 +9,8 @@ use User\V1\Rest\AbstractResource;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
+use function Amp\Iterator\toArray;
+
 class SiswaResource extends AbstractResource
 {
     protected $siswaService;
@@ -124,8 +126,7 @@ class SiswaResource extends AbstractResource
     {
         $userProfile = $this->fetchUserProfile();
         if(is_null($userProfile)) return new ApiProblemResponse(new ApiProblem(401,'You\'re Not Authorized'));
-        $urlParams = [];
-
+        $urlParams = $params->toArray();
         $qb = $this->siswaMapper->fetchAll($urlParams);
         $paginatorAdapter =$this->siswaMapper->createPaginatorAdapter($qb);
         return new Paginator($paginatorAdapter);

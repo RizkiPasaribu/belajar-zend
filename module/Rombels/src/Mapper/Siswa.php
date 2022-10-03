@@ -25,6 +25,12 @@ class Siswa extends AbstractMapper implements MapperInterface
         $qb = $this->getEntityRepository()->createQueryBuilder('t');
         $cacheKey = 'siswa_';
 
+        //search by nama
+        if (isset($params['nama'])) {
+            $qb->where('t.nama LIKE :nama')
+            ->setParameter('nama', $params['nama']);
+        }
+
         $sort = ($asc === false) ? 'DESC' : 'ASC';
         if (is_null($order)) {
             $qb->orderBy('t.createdAt', $sort);
