@@ -25,6 +25,9 @@ class SiswaHydratorFactory implements FactoryInterface
         $url = $helper->getScheme() . '://' . $helper->getHost();
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $hydrator = new DoctrineObject($entityManager);
+        $hydrator->addStrategy('photo', new Strategy\PhotoStrategy($url));
+        $hydrator->addStrategy('createdBy', new \User\V1\Hydrator\Strategy\UserProfileStrategy);
+        $hydrator->addStrategy('updatedBy', new \User\V1\Hydrator\Strategy\UserProfileStrategy);
         $hydrator->addStrategy('createdAt', new DateTimeFormatterStrategy('c'));
         $hydrator->addStrategy('updatedAt', new DateTimeFormatterStrategy('c'));
         $hydrator->addFilter('exclude', function ($property) {

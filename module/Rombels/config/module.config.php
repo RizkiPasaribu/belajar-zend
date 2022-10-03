@@ -6,6 +6,8 @@ return [
             \Rombels\V1\Rest\Kelas\KelasResource::class => \Rombels\V1\Rest\Kelas\KelasResourceFactory::class,
             \Rombels\V1\Service\Kelas::class => \Rombels\V1\Service\KelasFactory::class,
             \Rombels\V1\Service\Listener\KelasEventListener::class => \Rombels\V1\Service\Listener\KelasEventListenerFactory::class,
+            \Rombels\V1\Service\Siswa::class => \Rombels\V1\Service\SiswaFactory::class,
+            \Rombels\V1\Service\Listener\SiswaEventListener::class => \Rombels\V1\Service\Listener\SiswaEventListenerFactory::class,
         ],
         'abstract_factories' => [
             0 => \Rombels\Mapper\AbstractMapperFactory::class,
@@ -97,10 +99,9 @@ return [
         ],
         'accept_whitelist' => [
             'Rombels\\V1\\Rest\\Siswa\\Controller' => [
-                0 => 'application/vnd.rombels.v1+json',
-                1 => 'application/hal+json',
-                2 => 'application/json',
-                3 => 'multipart/form-data',
+                0 => 'application/hal+json',
+                1 => 'application/json',
+                2 => 'multipart/form-data',
             ],
             'Rombels\\V1\\Rest\\Kelas\\Controller' => [
                 0 => 'application/vnd.rombels.v1+json',
@@ -110,9 +111,8 @@ return [
         ],
         'content_type_whitelist' => [
             'Rombels\\V1\\Rest\\Siswa\\Controller' => [
-                0 => 'application/vnd.rombels.v1+json',
-                1 => 'application/json',
-                2 => 'multipart/form-data',
+                0 => 'application/json',
+                1 => 'multipart/form-data',
             ],
             'Rombels\\V1\\Rest\\Kelas\\Controller' => [
                 0 => 'application/vnd.rombels.v1+json',
@@ -186,21 +186,23 @@ return [
                 'required' => false,
                 'validators' => [
                     0 => [
-                        'name' => \Zend\Validator\File\ExcludeMimeType::class,
-                        'options' => [
-                            'mimeType' => 'image/png, image/jpeg',
-                            'message' => 'File type extension not match',
-                        ],
-                    ],
-                    1 => [
                         'name' => \Zend\Validator\File\Extension::class,
                         'options' => [
                             'extension' => 'png, jpg, jpeg',
-                            'message' => 'File extension not match',
+                            'message' => 'Extension File Not Allowed',
                         ],
                     ],
                 ],
-                'filters' => [],
+                'filters' => [
+                    0 => [
+                        'name' => \Zend\Filter\File\RenameUpload::class,
+                        'options' => [
+                            'randomize' => true,
+                            'use_upload_extension' => true,
+                            'target' => 'data/photo/profile',
+                        ],
+                    ],
+                ],
                 'name' => 'photo',
             ],
         ],

@@ -7,16 +7,10 @@ class SiswaResourceFactory
     {
         $userProfileMapper = $services->get('User\Mapper\UserProfile');
         $siswaMapper   = $services->get(\Rombels\Mapper\Siswa::class);
-        // $userAccessMapper   = $services->get(\User\Mapper\UserAccess::class);
-        // $siswaService  = $services->get(\Rombels\V1\Service\Siswa::class);
-        return new SiswaResource(
-            // $qRCodeMapper, 
-            $userProfileMapper,
-            $siswaMapper
-            // $userAccessMapper
-        );
-        // $siswaResource->siswaService($siswaResource);
-        // return $siswaResource;
-        // return new SiswaResource();
+        $kelasMapper   = $services->get(\Rombels\Mapper\Kelas::class);
+        $siswaService  = $services->get(\Rombels\V1\Service\Siswa::class);
+        $siswaResource = new SiswaResource($userProfileMapper,$siswaMapper,$kelasMapper);
+        $siswaResource->setSiswaService($siswaService );
+        return $siswaResource;
     }
 }

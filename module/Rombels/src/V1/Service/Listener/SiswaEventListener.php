@@ -2,7 +2,7 @@
 
 namespace Rombels\V1\Service\Listener;
 
-use Rombels\Entity\Kelas;;
+use Rombels\Entity\Siswa;
 
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
@@ -10,29 +10,29 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Exception\InvalidArgumentException;
 use Psr\Log\LoggerAwareTrait;
-use Rombels\Mapper\KelasTrait;
+use Rombels\Mapper\SiswaTrait;
 use Zend\EventManager\EventManagerAwareTrait;
-use Rombels\V1\KelasEvent;
+use Rombels\V1\SiswaEvent;
 use Zend\Log\Exception\RuntimeException;
 
-class KelasEventListener implements ListenerAggregateInterface
+class SiswaEventListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
     use EventManagerAwareTrait;
     use LoggerAwareTrait;
-    use KelasTrait;
+    use SiswaTrait;
 
     protected $config;
-    protected $kelasEvent;
-    protected $kelasHydrator;
-    protected $kelasIndicatorHydrator;
-    protected $kelasIndicatorAttachmentHydrator;
+    protected $siswaEvent;
+    protected $siswaHydrator;
+    protected $siswaIndicatorHydrator;
+    protected $siswaIndicatorAttachmentHydrator;
     protected $fillingTimeRangeHydrator;
 
     public function __construct(
-        \Rombels\Mapper\Kelas $kelasMapper
+        \Rombels\Mapper\Siswa $siswaMapper
     ) {
-        $this->setKelasMapper($kelasMapper);
+        $this->setSiswaMapper($siswaMapper);
     }
 
     /**
@@ -42,40 +42,44 @@ class KelasEventListener implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
-            KelasEvent::EVENT_CREATE_KELAS,
-            [$this, 'createKelas'],
+            SiswaEvent::EVENT_CREATE_SISWA,
+            [$this, 'createSiswa'],
             500
         );
 
         $this->listeners[] = $events->attach(
-            KelasEvent::EVENT_EDIT_KELAS,
-            [$this, 'editKelas'],
+            SiswaEvent::EVENT_EDIT_SISWA,
+            [$this, 'editSiswa'],
             500
         );
 
         $this->listeners[] = $events->attach(
-            KelasEvent::EVENT_DELETE_KELAS,
-            [$this, 'deleteKelas'],
+            SiswaEvent::EVENT_DELETE_SISWA,
+            [$this, 'deleteSiswa'],
             500
         );
     }
 
-    public function createKelas(KelasEvent $event)
+    public function createSiswa(SiswaEvent $event)
     {
         try {
             if (!$event->getInputFilter() instanceof InputFilterInterface) {
                 throw new InvalidArgumentException('Input Filter not set');
             }
             $bodyRequest = $event->getInputFilter()->getValues();
-            $kelasEntity = new Kelas;
-            $hydrateEntity  = $this->getKelasHydrator()->hydrate($bodyRequest, $kelasEntity);
-            $entityResult   = $this->getKelasMapper()->save($hydrateEntity);
-            $event->setKelasEntity($entityResult);
-            $uuid = $kelasEntity->getUuid();
+            $photoPath = $bodyRequest['photo']['tmp_name'];
+            unset($bodyRequest['photo']);
+            $bodyRequest['photo']=$photoPath;
+
+            $siswaEntity = new Siswa;
+            $hydrateEntity  = $this->getSiswaHydrator()->hydrate($bodyRequest, $siswaEntity);
+            $entityResult   = $this->getSiswaMapper()->save($hydrateEntity);
+            $event->setSiswaEntity($entityResult);
+            $uuid = $siswaEntity->getUuid();
 
             $this->logger->log(
                 \Psr\Log\LogLevel::INFO,
-                "{function}: New Kelas {uuid} created successfully",
+                "{function}: New Siswa {uuid} created successfully",
                 [
                     "function" => __FUNCTION__,
                     "uuid" => $uuid
@@ -95,33 +99,33 @@ class KelasEventListener implements ListenerAggregateInterface
         }
     }
 
-    public function editKelas(KelasEvent $event)
+    public function editSiswa(SiswaEvent $event)
     {
         try {
             $inputFilter = $event->getInputFilter();
             if (!$inputFilter instanceof InputFilterInterface)
-                throw new InvalidArgumentException('InputFilter not set');
-
+            throw new InvalidArgumentException('InputFilter not set');
             $bodyRequest = $inputFilter->getValues();
 
-            $entity = $event->getKelasEntity();
-
+            $entity = $event->getSiswaEntity();
+            var_dump($entity->getKelas());
+            exit;
             $entity->setUpdatedAt(new \DateTime('now'));
-            $hydratedEntity = $this->kelasHydrator->hydrate($bodyRequest, $entity);
-
-            if (!($hydratedEntity instanceof Kelas))
-                throw new \Exception('HyratedEntity is not instance of Kelas Entity');
+            $hydratedEntity = $this->siswaHydrator->hydrate($bodyRequest, $entity);
             
-            $resultEntity  = $this->kelasMapper->save($hydratedEntity);
-
-            if (!($resultEntity instanceof Kelas))
-                throw new \Exception("ResultEntity is not instance of Kelas Entity");
-            $event->setKelasEntity($resultEntity);
+            if (!($hydratedEntity instanceof Siswa))
+            throw new \Exception('HyratedEntity is not instance of Siswa Entity');
+        
+            $resultEntity  = $this->siswasMapper->save($hydratedEntity);
+            
+            if (!($resultEntity instanceof Siswa))
+            throw new \Exception("ResultEntity is not instance of Siswa Entity");
+            $event->setSiswaEntity($resultEntity);
             $uuid = $resultEntity->getUuid();
-
+            
             $this->logger->log(
                 \Psr\Log\LogLevel::INFO,
-                "{function}: Kelas {uuid} updated successfully",
+                "{function}: Siswa {uuid} updated successfully",
                 [
                     "function" => __FUNCTION__,
                     "uuid" => $uuid
@@ -140,16 +144,16 @@ class KelasEventListener implements ListenerAggregateInterface
         }
     }
 
-    public function deleteKelas(KelasEvent $event)
+    public function deleteSiswa(SiswaEvent $event)
     {
         try {
             $deletedData = $event->getDeleteData();
-            $this->getKelasMapper()->delete($deletedData);
+            $this->getSiswaMapper()->delete($deletedData);
             $uuid   = $deletedData->getUuid();
 
             $this->logger->log(
                 \Psr\Log\LogLevel::INFO,
-                "{function} {uuid}: Data Kelas deleted successfully",
+                "{function} {uuid}: Data Siswa deleted successfully",
                 [
                     'uuid' => $uuid,
                     "function" => __FUNCTION__
@@ -161,21 +165,21 @@ class KelasEventListener implements ListenerAggregateInterface
     }
 
     /**
-     * Get the value of kelasHydrator
+     * Get the value of siswaHydrator
      */
-    public function getKelasHydrator()
+    public function getSiswaHydrator()
     {
-        return $this->kelasHydrator;
+        return $this->siswaHydrator;
     }
 
     /**
-     * Set the value of kelasHydrator
+     * Set the value of siswaHydrator
      *
      * @return  self
      */
-    public function setKelasHydrator($kelasHydrator)
+    public function setSiswaHydrator($siswaHydrator)
     {
-        $this->kelasHydrator = $kelasHydrator;
+        $this->siswaHydrator = $siswaHydrator;
 
         return $this;
     }

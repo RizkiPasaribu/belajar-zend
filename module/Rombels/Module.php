@@ -12,6 +12,11 @@ class Module implements ApigilityProviderInterface
         $kelasService = $sm->get(\Rombels\V1\Service\Kelas::class);
         $kelasEventListener = $sm->get(\Rombels\V1\Service\Listener\KelasEventListener::class);
         $kelasEventListener->attach($kelasService->getEventManager());
+
+        // Siswa
+        $siswaService = $sm->get(\Rombels\V1\Service\Siswa::class);
+        $siswaEventListener = $sm->get(\Rombels\V1\Service\Listener\SiswaEventListener::class);
+        $siswaEventListener->attach($siswaService->getEventManager());
     }
 
     public function getConfig()

@@ -1,9 +1,9 @@
 <?php
 namespace Rombels\V1\Rest\Kelas;
 
-use Amp\Success;
+
 use Rombels\Mapper\KelasTrait;
-use User\Mapper\UserProfileTrait;
+
 use User\V1\Rest\AbstractResource;
 use Zend\Paginator\Paginator;
 use ZF\ApiProblem\ApiProblem;
@@ -57,7 +57,6 @@ class KelasResource extends AbstractResource
      */
     public function delete($id)
     {
-        //cek authorization
         $userProfile = $this->fetchUserProfile();
         if (is_null($userProfile) || is_null($userProfile->getAccount())) {
             return new ApiProblemResponse(new ApiProblem(404, "You do not have access"));
@@ -69,11 +68,10 @@ class KelasResource extends AbstractResource
                 return new ApiProblem(404, "Kelas data Not Found");
             }
             $this->getKelasService()->deleteKelas($kelas);
-            return new ApiProblem(200, "Succes Deleted uuid".$id,null,"Success");
+            return new ApiProblem(200, "Succes Deleted Kelas With UUID ".$id,null,"Success");
         } catch (\RuntimeException $e) {
             return new ApiProblemResponse(new ApiProblem(500, $e->getMessage()));
         }
-        // return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
     }
 
     /**
@@ -132,7 +130,7 @@ class KelasResource extends AbstractResource
             return new ApiProblemResponse(new ApiProblem(404, "Kelas data not found!"));
         }
         $inputFilter = $this->getInputFilter();
-
+        
         $this->getKelasService()->editKelas($kelas, $inputFilter);
         return $kelas;
     }
