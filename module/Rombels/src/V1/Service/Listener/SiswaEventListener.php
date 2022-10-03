@@ -69,7 +69,7 @@ class SiswaEventListener implements ListenerAggregateInterface
             $bodyRequest = $event->getInputFilter()->getValues();
             $photoPath = $bodyRequest['photo']['tmp_name'];
             unset($bodyRequest['photo']);
-            $bodyRequest['photo']=$photoPath;
+            $bodyRequest['photo'] = $photoPath;
 
             $siswaEntity = new Siswa;
             $hydrateEntity  = $this->getSiswaHydrator()->hydrate($bodyRequest, $siswaEntity);
@@ -104,7 +104,7 @@ class SiswaEventListener implements ListenerAggregateInterface
         try {
             $inputFilter = $event->getInputFilter();
             if (!$inputFilter instanceof InputFilterInterface)
-            throw new InvalidArgumentException('InputFilter not set');
+                throw new InvalidArgumentException('InputFilter not set');
             $bodyRequest = $inputFilter->getValues();
 
             $entity = $event->getSiswaEntity();
@@ -112,17 +112,17 @@ class SiswaEventListener implements ListenerAggregateInterface
             exit;
             $entity->setUpdatedAt(new \DateTime('now'));
             $hydratedEntity = $this->siswaHydrator->hydrate($bodyRequest, $entity);
-            
+
             if (!($hydratedEntity instanceof Siswa))
-            throw new \Exception('HyratedEntity is not instance of Siswa Entity');
-        
-            $resultEntity  = $this->siswasMapper->save($hydratedEntity);
-            
+                throw new \Exception('HyratedEntity is not instance of Siswa Entity');
+
+            $resultEntity  = $this->siswaMapper->save($hydratedEntity);
+
             if (!($resultEntity instanceof Siswa))
-            throw new \Exception("ResultEntity is not instance of Siswa Entity");
+                throw new \Exception("ResultEntity is not instance of Siswa Entity");
             $event->setSiswaEntity($resultEntity);
             $uuid = $resultEntity->getUuid();
-            
+
             $this->logger->log(
                 \Psr\Log\LogLevel::INFO,
                 "{function}: Siswa {uuid} updated successfully",
